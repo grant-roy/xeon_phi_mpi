@@ -1,13 +1,19 @@
-
+#include "mpi.h"
 #include <stdio.h>
+#include <string.h>
 
+int main (int argc, char *argv[]) {
+    int i, rank, size, namelen;
+    char name[MPI_MAX_PROCESSOR_NAME];
+    MPI_Init (&argc, &argv);
 
+    MPI_Comm_size (MPI_COMM_WORLD, &size);
+    MPI_Comm_rank (MPI_COMM_WORLD, &rank);
+    MPI_Get_processor_name (name, &namelen);
 
-_Cilk_shared int numDevices;
+    printf ("Hello World from rank %d running on %s!\n", rank, name);
+    if (rank == 0) printf("MPI World size = %d processes\n", size);
 
-int main() {
-
-    numDevices = _Offload_number_of_devices();
-    printf("Number of availabe coproccessors: %d\n\n",numDevices);
+    MPI_Finalize ();
 
 }
